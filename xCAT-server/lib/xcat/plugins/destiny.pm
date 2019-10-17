@@ -222,9 +222,17 @@ sub setdestiny {
                 } #If x86 node and undionly.kpxe exists, presume they know what they are doing
                 next;
             }
-            $bphash->{kernel} = $ient->{kernel};
-            if ($ient->{initrd})   { $bphash->{initrd}   = $ient->{initrd} }
-            if ($ient->{kcmdline}) { $bphash->{kcmdline} = $ient->{kcmdline} }
+            # jc: original code
+            #$bphash->{kernel} = $ient->{kernel};
+            #if ($ient->{initrd})   { $bphash->{initrd}   = $ient->{initrd} }
+            #if ($ient->{kcmdline}) { $bphash->{kcmdline} = $ient->{kcmdline} }
+            # jc changed to the following
+            $bphash->{$_}->[0]->{kernel} =  $ient->{kernel};
+            $bphash->{$_}->[0]->{initrd} =  $ient->{initrd};
+            $bphash->{$_}->[0]->{kcmdline} = $ient->{kcmdline};
+
+            #$callback->({ warning => [Dumper($ient) ] });
+            #$callback->({ warning => [Dumper($bphash) ] });
         }
     } elsif ($state =~ /^install[=\$]/ or $state eq 'install' or $state =~ /^netboot[=\$]/ or $state eq 'netboot' or $state eq "image" or $state eq "winshell" or $state =~ /^osimage/ or $state =~ /^statelite/) {
         my $target;

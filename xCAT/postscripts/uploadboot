@@ -15,6 +15,13 @@ elif [ -r /boot/grub/menu.lst ]; then
 	INAME=`grep -v ^# /boot/grub/menu.lst|grep -v title|grep initrd|cut -d' ' -f 2|sed -e 's!/boot/!!'`
 	INITRD=/boot/$INAME
 	INITRD=`echo $INITRD|sed -e 's!//!/!g'`
+elif [ -r /boot/grub2/grub.cfg ]; then # only tested in rhels 7.6  ppc64le
+	KNAME=`grep -v ^# /boot/grub2/grub.cfg|grep -v title|grep kernel|cut -d' ' -f 2| head -1| sed -e 's!/boot/!!'`
+	KERNEL=/boot/$KNAME
+	KCMDLINE=`grep -v ^# /boot/grub2/grub.cfg |grep -v title|grep kernel|cut -d' ' -f 3-|sed -e 's! rhgb!!'|head -1`
+	INAME=`grep -v ^# /boot/grub2/grub.cfg|grep -v title|grep initrd|cut -d' ' -f 2| grep initramfs | grep -v rescue |  head -1 |sed -e 's!/boot/!!'`
+	INITRD=/boot/$INAME
+	INITRD=`echo $INITRD|sed -e 's!//!/!g'`
 
 fi
 `dirname $0`/unlocktftpdir.awk $MASTER 3002
